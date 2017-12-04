@@ -56,6 +56,7 @@ export default class CodeEditor extends React.Component {
       lineWrapping: true,
       theme: this.props.theme,
       indentUnit: this.props.indentSize,
+      scrollbarStyle: 'simple',
       tabSize: this.props.indentSize,
       indentWithTabs: this.props.indentType !== 'space',
       keyMap: this.props.keyMap,
