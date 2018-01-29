@@ -11,6 +11,7 @@ const dataApi = {
   createNote: require('./createNote'),
   updateNote: require('./updateNote'),
   deleteNote: require('./deleteNote'),
+  duplicateNote: require('./duplicateNote'),
   moveNote: require('./moveNote'),
   migrateFromV5Storage: require('./migrateFromV5Storage'),
 

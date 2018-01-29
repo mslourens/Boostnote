@@ -64,6 +64,7 @@ class NoteList extends React.Component {
     this.handleNoteListKeyUp = this.handleNoteListKeyUp.bind(this)
     this.getNoteKeyFromTargetIndex = this.getNoteKeyFromTargetIndex.bind(this)
     this.deleteNote = this.deleteNote.bind(this)
+    this.duplicateNote = this.duplicateNote.bind(this)
     this.focusNote = this.focusNote.bind(this)
     this.pinToTop = this.pinToTop.bind(this)
 
@@ -439,19 +440,20 @@ class NoteList extends React.Component {
       this.handleNoteClick(e, uniqueKey)
     }
 
-    const pinLabel = note.isPinned ? 'Remove pin' : 'Pin to Top'
-    const deleteLabel = 'Delete Note'
-
     const menu = new Menu()
     if (!location.pathname.match(/\/home|\/starred|\/trash/)) {
       menu.append(new MenuItem({
-        label: pinLabel,
+        label: note.isPinned ? 'Remove pin' : 'Pin to Top',
         click: this.pinToTop
       }))
     }
     menu.append(new MenuItem({
-      label: deleteLabel,
+      label: 'Delete Note',
       click: this.deleteNote
+    }))
+    menu.append(new MenuItem({
+      label: 'Duplicate Note',
+      click: this.duplicateNote
     }))
     menu.popup()
   }
@@ -540,6 +542,29 @@ class NoteList extends React.Component {
         console.error('Notes could not go to trash: ' + err)
       })
     }
+    this.setState({ selectedNoteKeys: [] })
+  }
+
+  duplicateNote () {
+    const { dispatch } = this.props
+    const { selectedNoteKeys } = this.state
+    const notes = this.notes.map((note) => Object.assign({}, note))
+    const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
+
+    Promise
+      .all(selectedNotes.map((note) => dataApi.duplicateNote(note.storage, note.key, note)))
+      .then((newNotes) => {
+        newNotes.forEach((newNote) => {
+          dispatch({
+            type: 'UPDATE_NOTE',
+            note: newNote
+          })
+        })
+      })
+      .catch((err) => {
+        console.error('Notes could not be duplicated: ' + err)
+      })
+
     this.setState({ selectedNoteKeys: [] })
   }
 
