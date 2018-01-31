@@ -4,6 +4,7 @@ const CSON = require('@rokt33r/season')
 const sander = require('sander')
 const { findStorage } = require('browser/lib/findStorage')
 const keygen = require('browser/lib/keygen')
+const _ = require('lodash')
 
 function duplicateNote (storageKey, noteKey) {
   let targetStorage
@@ -51,7 +52,7 @@ function duplicateNote (storageKey, noteKey) {
         return copiedData
       } catch (err) {
         console.warn('Failed to find note cson', err)
-        return Promise.reject(e)
+        return Promise.reject(err)
       }
     })
 }

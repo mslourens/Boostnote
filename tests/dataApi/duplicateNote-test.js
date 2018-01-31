@@ -56,7 +56,7 @@ test.serial('Duplicate a note', (t) => {
       const originalData = CSON.readFileSync(path.join(storagePath, 'notes', original.key + '.cson'))
       const duplicateData = CSON.readFileSync(path.join(storagePath, 'notes', duplicate.key + '.cson'))
       t.is(input1.title, originalData.title)
-      t.is(input1.title, duplicateData.title + ' - copy')
+      t.is(duplicateData.title, originalData.title + ' - copy')
       t.is(input1.description, originalData.description)
       t.is(input1.description, duplicateData.description)
       t.is(input1.tags.length, originalData.tags.length)
